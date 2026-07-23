@@ -1,0 +1,17 @@
+{
+  ".claude/settings.local.json": {
+    "mtime": 1784559938.138499,
+    "ast_hash": "867f6a4c11937d4f07fa1813acad222c",
+    "semantic_hash": "867f6a4c11937d4f07fa1813acad222c"
+  },
+  "docs/ARCHITECTURE.md": {
+    "mtime": 1784814190.5148754,
+    "ast_hash": "bb2fcf37bb1ca62204b503b4bbb59bd1",
+    "semantic_hash": "bb2fcf37bb1ca62204b503b4bbb59bd1"
+  },
+  "docs/SCOPE.md": {
+    "mtime": 1784811146.954255,
+    "ast_hash": "4590956f2aab68586132e754ec48c01c",
+    "semantic_hash": "4590956f2aab68586132e754ec48c01c"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "allow": [
+      "Bash(*)",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "WebFetch(*)",
+      "WebSearch"
+    ],
+    "deny": []
+  },
+  "env": {
+    "GNUCOBOL_HOME": "vendor/gnucobol"
+  }
+}

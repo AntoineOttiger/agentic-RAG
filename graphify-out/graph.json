@@ -1,0 +1,1913 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "RAG raisonnement temporel multi-hop",
+      "type": "System",
+      "description": "Syst\u00e8me RAG r\u00e9pondant \u00e0 des questions multi-hop temporelles sur un corpus de presse en prouvant l'absence d'hallucinations par la mesure.",
+      "source_file": "SCOPE.md",
+      "source_location": "1. Objectif",
+      "file_type": "concept",
+      "id": "rag_system",
+      "community": 3,
+      "norm_label": "rag raisonnement temporel multi-hop"
+    },
+    {
+      "label": "Banc d'\u00e9valuation",
+      "type": "Component",
+      "description": "Produit offline batch qui pilote le c\u0153ur sur ~2 556 questions en mode A et A+B et produit le rapport chiffr\u00e9.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "0. Fil conducteur",
+      "file_type": "concept",
+      "id": "eval_bench",
+      "community": 1,
+      "norm_label": "banc d'evaluation"
+    },
+    {
+      "label": "Application interactive",
+      "type": "Component",
+      "description": "Produit interactif (GUI plus tard) o\u00f9 une question donne une r\u00e9ponse en mode A+B.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "0. Fil conducteur",
+      "file_type": "concept",
+      "id": "interactive_app",
+      "community": 1,
+      "norm_label": "application interactive"
+    },
+    {
+      "label": "C\u0153ur unique",
+      "type": "Concept",
+      "description": "C\u0153ur RAG unique partag\u00e9 par le banc d'\u00e9valuation et l'application interactive.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "0. Fil conducteur",
+      "file_type": "concept",
+      "id": "single_core",
+      "community": 1,
+      "norm_label": "c\u0153ur unique"
+    },
+    {
+      "label": "Architecture hexagonale",
+      "type": "Decision",
+      "description": "Style runtime hexagonal (ports & adapters) choisi pour modules profonds et GUI-ready.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "1. Principes / D\u00e9cision 1",
+      "file_type": "concept",
+      "id": "hexagonal_arch",
+      "community": 3,
+      "norm_label": "architecture hexagonale"
+    },
+    {
+      "label": "Pipeline-\u00e0-artefacts",
+      "type": "Decision",
+      "description": "Style offline o\u00f9 les \u00e9tapes lentes sont mat\u00e9rialis\u00e9es en artefacts cacheables et reproductibles.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "1. Principes / D\u00e9cision 1",
+      "file_type": "concept",
+      "id": "pipeline_artefacts",
+      "community": 3,
+      "norm_label": "pipeline-a-artefacts"
+    },
+    {
+      "label": "LlamaIndex confin\u00e9 aux adapters",
+      "type": "Decision",
+      "description": "LlamaIndex reste dans les adapters et la d\u00e9composition (couche B) est \u00e9crite \u00e0 la main pour garder le c\u0153ur d\u00e9coupl\u00e9 et auditable.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "1. Principes / D\u00e9cision 2",
+      "file_type": "concept",
+      "id": "llamaindex_confined",
+      "community": 2,
+      "norm_label": "llamaindex confine aux adapters"
+    },
+    {
+      "label": "Une seule pipeline",
+      "type": "Decision",
+      "description": "Une pipeline unique o\u00f9 la couche B est une \u00e9tape optionnelle inject\u00e9e, pour une comparaison A vs A+B rigoureuse.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "1. Principes / D\u00e9cision 3",
+      "file_type": "concept",
+      "id": "single_pipeline_decision",
+      "community": 0,
+      "norm_label": "une seule pipeline"
+    },
+    {
+      "label": "Answer riche et typ\u00e9",
+      "type": "Decision",
+      "description": "Contrat de retour unique et typ\u00e9 avec trace de raisonnement de premi\u00e8re classe nourrissant \u00e9val et GUI.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "1. Principes / D\u00e9cision 4",
+      "file_type": "concept",
+      "id": "rich_answer_decision",
+      "community": 0,
+      "norm_label": "answer riche et type"
+    },
+    {
+      "label": "Config unique + runs immuables",
+      "type": "Decision",
+      "description": "Config unique par run, runs immuables hash\u00e9s et artefacts adress\u00e9s par contenu pour la reproductibilit\u00e9.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "1. Principes / D\u00e9cision 5",
+      "file_type": "concept",
+      "id": "repro_decision",
+      "community": 5,
+      "norm_label": "config unique + runs immuables"
+    },
+    {
+      "label": "\u00c9valuation en contexte s\u00e9par\u00e9",
+      "type": "Decision",
+      "description": "\u00c9valuation isol\u00e9e du c\u0153ur ; m\u00e9triques retrieval en fonctions pures et juge derri\u00e8re l'interface Judge.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "1. Principes / D\u00e9cision 6",
+      "file_type": "concept",
+      "id": "eval_separate_decision",
+      "community": 8,
+      "norm_label": "evaluation en contexte separe"
+    },
+    {
+      "label": "Fa\u00e7ade RagService GUI-ready",
+      "type": "Decision",
+      "description": "Fa\u00e7ade RagService in-process con\u00e7ue pour un passage HTTP indolore, rendant la GUI un simple adapter.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "1. Principes / D\u00e9cision 7",
+      "file_type": "concept",
+      "id": "facade_decision",
+      "community": 4,
+      "norm_label": "facade ragservice gui-ready"
+    },
+    {
+      "label": "R\u00e8gle de d\u00e9pendance",
+      "type": "Concept",
+      "description": "Unique r\u00e8gle anti-spaghetti : apps/evaluation -> core -> domain <- adapters, les fl\u00e8ches ne pointant jamais vers l'ext\u00e9rieur.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "2. R\u00e8gle de d\u00e9pendance",
+      "file_type": "concept",
+      "id": "dependency_rule",
+      "community": 2,
+      "norm_label": "regle de dependance"
+    },
+    {
+      "label": "domain",
+      "type": "Module",
+      "description": "Couche de types purs sans d\u00e9pendance externe, le vocabulaire stable du syst\u00e8me.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules",
+      "file_type": "concept",
+      "id": "domain_layer",
+      "community": 2,
+      "norm_label": "domain"
+    },
+    {
+      "label": "core",
+      "type": "Module",
+      "description": "C\u0153ur RAG d\u00e9pendant uniquement de domain, composant les ports.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules",
+      "file_type": "concept",
+      "id": "core_layer",
+      "community": 4,
+      "norm_label": "core"
+    },
+    {
+      "label": "adapters",
+      "type": "Module",
+      "description": "D\u00e9tails traduisant domain vers le monde ext\u00e9rieur (anti-corruption layer).",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules",
+      "file_type": "concept",
+      "id": "adapters_layer",
+      "community": 2,
+      "norm_label": "adapters"
+    },
+    {
+      "label": "config",
+      "type": "Module",
+      "description": "Module de sch\u00e9ma Pydantic et loader YAML calculant le hash de config.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules",
+      "file_type": "concept",
+      "id": "config_module",
+      "community": 5,
+      "norm_label": "config"
+    },
+    {
+      "label": "pipelines_offline",
+      "type": "Module",
+      "description": "\u00c9tapes mat\u00e9rialis\u00e9es en artefacts adress\u00e9s par contenu : ingestion et indexation.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules",
+      "file_type": "concept",
+      "id": "pipelines_offline",
+      "community": 6,
+      "norm_label": "pipelines_offline"
+    },
+    {
+      "label": "evaluation",
+      "type": "Module",
+      "description": "Contexte s\u00e9par\u00e9 qui consomme le c\u0153ur sans le modifier : m\u00e9triques, juge et boucle d'\u00e9val.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules",
+      "file_type": "concept",
+      "id": "evaluation_module",
+      "community": 1,
+      "norm_label": "evaluation"
+    },
+    {
+      "label": "apps",
+      "type": "Module",
+      "description": "Driving adapters entrants : CLI en V1 et UI plus tard.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules",
+      "file_type": "concept",
+      "id": "apps_module",
+      "community": 4,
+      "norm_label": "apps"
+    },
+    {
+      "label": "domain/types.py",
+      "type": "Component",
+      "description": "Types purs du domaine : Chunk, Query, SubQuery, RetrievedContext, Citation, ReasoningTrace, Answer, Evidence, TokenUsage.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules",
+      "file_type": "concept",
+      "id": "types_py",
+      "community": 2,
+      "norm_label": "domain/types.py"
+    },
+    {
+      "label": "domain/ports.py",
+      "type": "Component",
+      "description": "Protocols d\u00e9finissant les ports : Retriever, Decomposer, Generator, Indexer, Embedder, Judge.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules",
+      "file_type": "concept",
+      "id": "ports_py",
+      "community": 2,
+      "norm_label": "domain/ports.py"
+    },
+    {
+      "label": "Pipeline",
+      "type": "Component",
+      "description": "Pipeline.answer(query) -> Answer, compose les ports du domaine.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / pipeline.py",
+      "file_type": "concept",
+      "id": "pipeline_py",
+      "community": 4,
+      "norm_label": "pipeline"
+    },
+    {
+      "label": "RagService",
+      "type": "Component",
+      "description": "Fa\u00e7ade RagService.ask(query) -> Answer cachant toute la machinerie du c\u0153ur.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / service.py",
+      "file_type": "concept",
+      "id": "rag_service",
+      "community": 4,
+      "norm_label": "ragservice"
+    },
+    {
+      "label": "core/decompose",
+      "type": "Component",
+      "description": "Paquet de la couche B (d\u00e9composition de requ\u00eate) \u00e9crit \u00e0 la main.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / decompose",
+      "file_type": "concept",
+      "id": "decompose_pkg",
+      "community": 0,
+      "norm_label": "core/decompose"
+    },
+    {
+      "label": "NullDecomposer",
+      "type": "Component",
+      "description": "D\u00e9composeur baseline A (pattern Null Object) produisant une trace de raisonnement \u00e0 un seul hop.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / null.py",
+      "file_type": "concept",
+      "id": "null_decomposer",
+      "community": 0,
+      "norm_label": "nulldecomposer"
+    },
+    {
+      "label": "QueryDecomposer",
+      "type": "Component",
+      "description": "Agent de d\u00e9composition de requ\u00eate (couche B, A+B) d\u00e9coupant une question multi-hop en sous-requ\u00eates.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / agentic.py",
+      "file_type": "concept",
+      "id": "query_decomposer",
+      "community": 0,
+      "norm_label": "querydecomposer"
+    },
+    {
+      "label": "adapters/llamaindex",
+      "type": "Component",
+      "description": "Adapter g\u00e9rant ingestion, chunking et indexation via LlamaIndex.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / llamaindex",
+      "file_type": "concept",
+      "id": "llamaindex_adapter",
+      "community": 3,
+      "norm_label": "adapters/llamaindex"
+    },
+    {
+      "label": "adapters/qdrant",
+      "type": "Component",
+      "description": "Adapter impl\u00e9mentant Retriever et Indexer sur Qdrant.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / qdrant",
+      "file_type": "concept",
+      "id": "qdrant_adapter",
+      "community": 2,
+      "norm_label": "adapters/qdrant"
+    },
+    {
+      "label": "adapters/embeddings",
+      "type": "Component",
+      "description": "Adapter Embedder bge local.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / embeddings",
+      "file_type": "concept",
+      "id": "embeddings_adapter",
+      "community": 2,
+      "norm_label": "adapters/embeddings"
+    },
+    {
+      "label": "adapters/llm",
+      "type": "Component",
+      "description": "Adapter Generator et client Mistral, port LLM partag\u00e9.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / llm",
+      "file_type": "concept",
+      "id": "llm_adapter",
+      "community": 7,
+      "norm_label": "adapters/llm"
+    },
+    {
+      "label": "config/schema.py",
+      "type": "Component",
+      "description": "Mod\u00e8les Pydantic valid\u00e9s de la configuration.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / schema.py",
+      "file_type": "concept",
+      "id": "schema_py",
+      "community": 5,
+      "norm_label": "config/schema.py"
+    },
+    {
+      "label": "config/loader.py",
+      "type": "Component",
+      "description": "Charge le YAML en config valid\u00e9e et calcule le hash de config.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / loader.py",
+      "file_type": "concept",
+      "id": "loader_py",
+      "community": 5,
+      "norm_label": "config/loader.py"
+    },
+    {
+      "label": "ingest.py",
+      "type": "Process",
+      "description": "\u00c9tape offline corpus -> chunks, artefact adress\u00e9 par contenu.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / ingest.py",
+      "file_type": "concept",
+      "id": "ingest_step",
+      "community": 6,
+      "norm_label": "ingest.py"
+    },
+    {
+      "label": "index.py",
+      "type": "Process",
+      "description": "\u00c9tape offline chunks -> index Qdrant, artefact adress\u00e9 par contenu.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / index.py",
+      "file_type": "concept",
+      "id": "index_step",
+      "community": 6,
+      "norm_label": "index.py"
+    },
+    {
+      "label": "retrieval_metrics",
+      "type": "Component",
+      "description": "Fonctions pures calculant Hit Rate, Recall@k et MRR contre l'evidence en or.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / retrieval_metrics.py",
+      "file_type": "concept",
+      "id": "retrieval_metrics",
+      "community": 1,
+      "norm_label": "retrieval_metrics"
+    },
+    {
+      "label": "ragas_judge",
+      "type": "Component",
+      "description": "Adapter RAGAS derri\u00e8re l'interface domain.Judge (LLM-as-judge).",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / ragas_judge.py",
+      "file_type": "concept",
+      "id": "ragas_judge",
+      "community": 1,
+      "norm_label": "ragas_judge"
+    },
+    {
+      "label": "run_eval",
+      "type": "Component",
+      "description": "Driving adapter bouclant sur les questions en A puis A+B et produisant le rapport.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / run_eval.py",
+      "file_type": "concept",
+      "id": "run_eval",
+      "community": 1,
+      "norm_label": "run_eval"
+    },
+    {
+      "label": "apps/cli",
+      "type": "Component",
+      "description": "Driving adapter V1 appelant RagService en ligne de commande.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / cli.py",
+      "file_type": "concept",
+      "id": "cli_app",
+      "community": 4,
+      "norm_label": "apps/cli"
+    },
+    {
+      "label": "apps/ui",
+      "type": "Component",
+      "description": "Interface graphique future (Streamlit/Gradio) r\u00e9utilisant le m\u00eame RagService.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / ui",
+      "file_type": "concept",
+      "id": "ui_app",
+      "community": 4,
+      "norm_label": "apps/ui"
+    },
+    {
+      "label": "configs/",
+      "type": "DataStructure",
+      "description": "Un YAML par run (baseline.yaml, enriched.yaml, ...).",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / configs",
+      "file_type": "concept",
+      "id": "configs_dir",
+      "community": 1,
+      "norm_label": "configs/"
+    },
+    {
+      "label": "runs/",
+      "type": "DataStructure",
+      "description": "Runs immuables <ts>-<hash>/ contenant config, manifest et r\u00e9sultats.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / runs",
+      "file_type": "concept",
+      "id": "runs_dir",
+      "community": 5,
+      "norm_label": "runs/"
+    },
+    {
+      "label": "artifacts/",
+      "type": "DataStructure",
+      "description": "Artefacts adress\u00e9s par contenu <hash>/ contenant chunks et index.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / artifacts",
+      "file_type": "concept",
+      "id": "artifacts_dir",
+      "community": 6,
+      "norm_label": "artifacts/"
+    },
+    {
+      "label": "Query",
+      "type": "DataStructure",
+      "description": "La question de l'utilisateur.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "4. Types de domaine",
+      "file_type": "concept",
+      "id": "type_query",
+      "community": 9,
+      "norm_label": "query"
+    },
+    {
+      "label": "SubQuery",
+      "type": "DataStructure",
+      "description": "Sous-question produite par la couche B (par entit\u00e9/p\u00e9riode/hop).",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "4. Types de domaine",
+      "file_type": "concept",
+      "id": "type_subquery",
+      "community": 0,
+      "norm_label": "subquery"
+    },
+    {
+      "label": "Chunk",
+      "type": "DataStructure",
+      "description": "Passage index\u00e9 avec m\u00e9tadonn\u00e9es (entit\u00e9, date/p\u00e9riode, section, type).",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "4. Types de domaine",
+      "file_type": "concept",
+      "id": "type_chunk",
+      "community": 6,
+      "norm_label": "chunk"
+    },
+    {
+      "label": "RetrievedContext",
+      "type": "DataStructure",
+      "description": "Chunk r\u00e9cup\u00e9r\u00e9 avec score et provenance (quelle sous-requ\u00eate).",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "4. Types de domaine",
+      "file_type": "concept",
+      "id": "type_retrieved_context",
+      "community": 1,
+      "norm_label": "retrievedcontext"
+    },
+    {
+      "label": "Citation",
+      "type": "DataStructure",
+      "description": "Lie une affirmation de la r\u00e9ponse \u00e0 un passage source.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "4. Types de domaine",
+      "file_type": "concept",
+      "id": "type_citation",
+      "community": 0,
+      "norm_label": "citation"
+    },
+    {
+      "label": "ReasoningTrace",
+      "type": "DataStructure",
+      "description": "Sous-requ\u00eates plus retrieval par sous-requ\u00eate (A = trace \u00e0 un hop).",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "4. Types de domaine",
+      "file_type": "concept",
+      "id": "type_reasoning_trace",
+      "community": 0,
+      "norm_label": "reasoningtrace"
+    },
+    {
+      "label": "Answer",
+      "type": "DataStructure",
+      "description": "Objet de retour riche typ\u00e9 consomm\u00e9 par l'\u00e9val et la GUI.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "5. Le contrat Answer",
+      "file_type": "concept",
+      "id": "type_answer",
+      "community": 0,
+      "norm_label": "answer"
+    },
+    {
+      "label": "Evidence",
+      "type": "DataStructure",
+      "description": "Evidence en or annot\u00e9e, utilis\u00e9e uniquement par l'\u00e9valuation.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "4. Types de domaine",
+      "file_type": "concept",
+      "id": "type_evidence",
+      "community": 3,
+      "norm_label": "evidence"
+    },
+    {
+      "label": "TokenUsage",
+      "type": "DataStructure",
+      "description": "Co\u00fbt et latence, pour le debug et l'analyse d'\u00e9val.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "4. Types de domaine",
+      "file_type": "concept",
+      "id": "type_token_usage",
+      "community": 0,
+      "norm_label": "tokenusage"
+    },
+    {
+      "label": "Retriever",
+      "type": "Concept",
+      "description": "Port de r\u00e9cup\u00e9ration de contexte d\u00e9fini dans le domaine.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / ports.py",
+      "file_type": "concept",
+      "id": "port_retriever",
+      "community": 2,
+      "norm_label": "retriever"
+    },
+    {
+      "label": "Decomposer",
+      "type": "Concept",
+      "description": "Port de d\u00e9composition de requ\u00eate inject\u00e9 dans la pipeline.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / ports.py",
+      "file_type": "concept",
+      "id": "port_decomposer",
+      "community": 0,
+      "norm_label": "decomposer"
+    },
+    {
+      "label": "Generator",
+      "type": "Concept",
+      "description": "Port de g\u00e9n\u00e9ration de r\u00e9ponse via LLM.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / ports.py",
+      "file_type": "concept",
+      "id": "port_generator",
+      "community": 7,
+      "norm_label": "generator"
+    },
+    {
+      "label": "Indexer",
+      "type": "Concept",
+      "description": "Port d'indexation des chunks.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / ports.py",
+      "file_type": "concept",
+      "id": "port_indexer",
+      "community": 2,
+      "norm_label": "indexer"
+    },
+    {
+      "label": "Embedder",
+      "type": "Concept",
+      "description": "Port de calcul d'embeddings.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / ports.py",
+      "file_type": "concept",
+      "id": "port_embedder",
+      "community": 2,
+      "norm_label": "embedder"
+    },
+    {
+      "label": "Judge",
+      "type": "Concept",
+      "description": "Port du juge LLM rempla\u00e7able, derri\u00e8re lequel vit l'adapter RAGAS.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "3. Carte des modules / ports.py",
+      "file_type": "concept",
+      "id": "port_judge",
+      "community": 1,
+      "norm_label": "judge"
+    },
+    {
+      "label": "Couche A (baseline)",
+      "type": "Concept",
+      "description": "Baseline : retriever metadata + NullDecomposer, retrieval enrichi de m\u00e9tadonn\u00e9es.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "6. La variation A vs A+B",
+      "file_type": "concept",
+      "id": "variant_a",
+      "community": 0,
+      "norm_label": "couche a (baseline)"
+    },
+    {
+      "label": "Couche A+B (enrichi)",
+      "type": "Concept",
+      "description": "Version enrichie : retriever metadata + QueryDecomposer avec d\u00e9composition de requ\u00eate.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "6. La variation A vs A+B",
+      "file_type": "concept",
+      "id": "variant_ab",
+      "community": 0,
+      "norm_label": "couche a+b (enrichi)"
+    },
+    {
+      "label": "Reproductibilit\u00e9",
+      "type": "Concept",
+      "description": "Config source unique de v\u00e9rit\u00e9, runs immuables et artefacts adress\u00e9s par contenu + cache.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "8. Reproductibilit\u00e9",
+      "file_type": "concept",
+      "id": "reproducibility",
+      "community": 5,
+      "norm_label": "reproductibilite"
+    },
+    {
+      "label": "hash_config",
+      "type": "Concept",
+      "description": "Hash de la config permettant de d\u00e9tecter deux runs identiques.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "8. Reproductibilit\u00e9",
+      "file_type": "concept",
+      "id": "config_hash",
+      "community": 5,
+      "norm_label": "hash_config"
+    },
+    {
+      "label": "Limite de d\u00e9terminisme LLM",
+      "type": "Concept",
+      "description": "Le LLM n'est pas d\u00e9terministe bit-\u00e0-bit m\u00eame \u00e0 temp\u00e9rature 0 ; mitig\u00e9 par temp\u00e9rature 0, logging brut et documentation.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "8. Reproductibilit\u00e9",
+      "file_type": "concept",
+      "id": "llm_determinism_limit",
+      "community": 5,
+      "norm_label": "limite de determinisme llm"
+    },
+    {
+      "label": "MultiHop-RAG",
+      "type": "Concept",
+      "description": "Dataset COLM 2024 : corpus de presse, ~2 556 questions multi-hop en 4 cat\u00e9gories avec evidence en or.",
+      "source_file": "SCOPE.md",
+      "source_location": "3.1 Donn\u00e9es",
+      "file_type": "concept",
+      "id": "multihop_rag",
+      "community": 3,
+      "norm_label": "multihop-rag"
+    },
+    {
+      "label": "Corpus d'articles de presse",
+      "type": "DataStructure",
+      "description": "Corpus d'articles de presse source du syst\u00e8me RAG.",
+      "source_file": "SCOPE.md",
+      "source_location": "3.1 Donn\u00e9es",
+      "file_type": "concept",
+      "id": "corpus",
+      "community": 3,
+      "norm_label": "corpus d'articles de presse"
+    },
+    {
+      "label": "Python",
+      "type": "Technology",
+      "description": "Langage d'impl\u00e9mentation du projet.",
+      "source_file": "SCOPE.md",
+      "source_location": "4. Stack technique",
+      "file_type": "concept",
+      "id": "python",
+      "community": 3,
+      "norm_label": "python"
+    },
+    {
+      "label": "LlamaIndex",
+      "type": "Technology",
+      "description": "Framework d'orchestration confin\u00e9 aux adapters.",
+      "source_file": "SCOPE.md",
+      "source_location": "4. Stack technique",
+      "file_type": "concept",
+      "id": "llamaindex",
+      "community": 3,
+      "norm_label": "llamaindex"
+    },
+    {
+      "label": "Qdrant",
+      "type": "Technology",
+      "description": "Vector store local (Docker) stockant l'index.",
+      "source_file": "SCOPE.md",
+      "source_location": "4. Stack technique",
+      "file_type": "concept",
+      "id": "qdrant",
+      "community": 2,
+      "norm_label": "qdrant"
+    },
+    {
+      "label": "BAAI bge",
+      "type": "Technology",
+      "description": "Embeddings locaux (bge-large / bge-m3).",
+      "source_file": "SCOPE.md",
+      "source_location": "4. Stack technique",
+      "file_type": "concept",
+      "id": "bge_embeddings",
+      "community": 2,
+      "norm_label": "baai bge"
+    },
+    {
+      "label": "Mistral Small",
+      "type": "Technology",
+      "description": "LLM g\u00e9n\u00e9rateur et juge via API free tier (provisoire, \u00e0 r\u00e9\u00e9valuer).",
+      "source_file": "SCOPE.md",
+      "source_location": "4. Stack technique",
+      "file_type": "concept",
+      "id": "mistral_llm",
+      "community": 7,
+      "norm_label": "mistral small"
+    },
+    {
+      "label": "RAGAS",
+      "type": "Technology",
+      "description": "Framework d'\u00e9valuation LLM-as-judge pour l'\u00e9tage g\u00e9n\u00e9ration.",
+      "source_file": "SCOPE.md",
+      "source_location": "4. Stack technique",
+      "file_type": "concept",
+      "id": "ragas",
+      "community": 1,
+      "norm_label": "ragas"
+    },
+    {
+      "label": "D\u00e9fi B",
+      "type": "Concept",
+      "description": "Raisonnement multi-hop, en particulier temporel (croiser des documents de p\u00e9riodes diff\u00e9rentes).",
+      "source_file": "SCOPE.md",
+      "source_location": "1. Objectif",
+      "file_type": "concept",
+      "id": "defi_b",
+      "community": 3,
+      "norm_label": "defi b"
+    },
+    {
+      "label": "D\u00e9fi D",
+      "type": "Concept",
+      "description": "Fiabilit\u00e9 mesur\u00e9e : \u00e9valuation automatis\u00e9e de justesse, fid\u00e9lit\u00e9 et d\u00e9tection des questions sans r\u00e9ponse.",
+      "source_file": "SCOPE.md",
+      "source_location": "1. Objectif",
+      "file_type": "concept",
+      "id": "defi_d",
+      "community": 3,
+      "norm_label": "defi d"
+    },
+    {
+      "label": "Tagging de m\u00e9tadonn\u00e9es",
+      "type": "Process",
+      "description": "\u00c9tiquetage par chunk : entit\u00e9, date/p\u00e9riode, section, type.",
+      "source_file": "SCOPE.md",
+      "source_location": "3.2 Ingestion & indexation",
+      "file_type": "concept",
+      "id": "metadata_tagging",
+      "community": 6,
+      "norm_label": "tagging de metadonnees"
+    },
+    {
+      "label": "Retrieval enrichi de m\u00e9tadonn\u00e9es",
+      "type": "Process",
+      "description": "Retrieval avec filtrage/routing par p\u00e9riode et entit\u00e9 (couche A).",
+      "source_file": "SCOPE.md",
+      "source_location": "3.3 Couche A",
+      "file_type": "concept",
+      "id": "metadata_retrieval",
+      "community": 0,
+      "norm_label": "retrieval enrichi de metadonnees"
+    },
+    {
+      "label": "Gestion des null queries",
+      "type": "Process",
+      "description": "Le syst\u00e8me r\u00e9pond preuve insuffisante / je ne sais pas quand aucune r\u00e9ponse n'est \u00e9tay\u00e9e.",
+      "source_file": "SCOPE.md",
+      "source_location": "3.4 Couche B",
+      "file_type": "concept",
+      "id": "null_query_handling",
+      "community": 0,
+      "norm_label": "gestion des null queries"
+    },
+    {
+      "label": "\u00c9tage 1 \u2014 Retrieval",
+      "type": "Process",
+      "description": "Comparaison m\u00e9canique \u00e0 l'evidence en or : Hit Rate, Recall@k, MRR (fonctions pures d\u00e9terministes).",
+      "source_file": "SCOPE.md",
+      "source_location": "3.5 \u00c9valuation",
+      "file_type": "concept",
+      "id": "eval_stage1",
+      "community": 1,
+      "norm_label": "etage 1 \u2014 retrieval"
+    },
+    {
+      "label": "\u00c9tage 2 \u2014 G\u00e9n\u00e9ration",
+      "type": "Process",
+      "description": "LLM-as-judge sur Answer Correctness, Faithfulness/Groundedness, Citation accuracy.",
+      "source_file": "SCOPE.md",
+      "source_location": "3.5 \u00c9valuation",
+      "file_type": "concept",
+      "id": "eval_stage2",
+      "community": 1,
+      "norm_label": "etage 2 \u2014 generation"
+    },
+    {
+      "label": "Validation manuelle du juge",
+      "type": "Process",
+      "description": "Calibration manuelle du juge LLM sur ~20 exemples avant usage automatis\u00e9.",
+      "source_file": "SCOPE.md",
+      "source_location": "3.5 \u00c9valuation",
+      "file_type": "concept",
+      "id": "judge_validation",
+      "community": 1,
+      "norm_label": "validation manuelle du juge"
+    },
+    {
+      "label": "Comparaison A vs A+B",
+      "type": "Process",
+      "description": "Comparaison chiffr\u00e9e A vs A+B sur les deux \u00e9tages et les 4 cat\u00e9gories de questions.",
+      "source_file": "SCOPE.md",
+      "source_location": "3.6 Livrable analytique",
+      "file_type": "concept",
+      "id": "ab_comparison",
+      "community": 0,
+      "norm_label": "comparaison a vs a+b"
+    },
+    {
+      "label": "Rapport d'\u00e9valuation chiffr\u00e9",
+      "type": "Concept",
+      "description": "Livrable du D\u00e9fi D comparant baseline A et version enrichie A+B avec preuves.",
+      "source_file": "SCOPE.md",
+      "source_location": "2. R\u00e9sultat attendu",
+      "file_type": "concept",
+      "id": "eval_report",
+      "community": 1,
+      "norm_label": "rapport d'evaluation chiffre"
+    },
+    {
+      "label": "Utilisateur",
+      "type": "Actor",
+      "description": "Personne posant une question au syst\u00e8me via CLI puis UI.",
+      "source_file": "ARCHITECTURE.md",
+      "source_location": "7.2 Application interactive",
+      "file_type": "concept",
+      "id": "user_actor",
+      "community": 4,
+      "norm_label": "utilisateur"
+    },
+    {
+      "label": "Risque biais d'auto-pr\u00e9f\u00e9rence",
+      "type": "Concept",
+      "description": "Juge = g\u00e9n\u00e9rateur (m\u00eame mod\u00e8le) \u2192 taux d'hallucination potentiellement trop optimiste.",
+      "source_file": "SCOPE.md",
+      "source_location": "6. Risques",
+      "file_type": "concept",
+      "id": "risk_self_pref",
+      "community": 7,
+      "norm_label": "risque biais d'auto-preference"
+    },
+    {
+      "label": "Risque rate limits Mistral",
+      "type": "Concept",
+      "description": "Rate limits du free tier Mistral pouvant bloquer l'\u00e9val en batch.",
+      "source_file": "SCOPE.md",
+      "source_location": "6. Risques",
+      "file_type": "concept",
+      "id": "risk_rate_limits",
+      "community": 7,
+      "norm_label": "risque rate limits mistral"
+    },
+    {
+      "label": "Hors scope V1",
+      "type": "Decision",
+      "description": "Exclusions V1 : finance/10-K, r\u00e9daction manuelle de Q/R, multi-corpus, graphe temporel, fine-tuning, UI/d\u00e9ploiement, benchmark TEMPO.",
+      "source_file": "SCOPE.md",
+      "source_location": "5. Hors scope",
+      "file_type": "concept",
+      "id": "out_of_scope",
+      "community": 4,
+      "norm_label": "hors scope v1"
+    }
+  ],
+  "links": [
+    {
+      "relation": "addresses",
+      "confidence": "EXTRACTED",
+      "source_file": "SCOPE.md",
+      "source": "rag_system",
+      "target": "defi_b",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "addresses",
+      "confidence": "EXTRACTED",
+      "source_file": "SCOPE.md",
+      "source": "rag_system",
+      "target": "defi_d",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "adopts",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "rag_system",
+      "target": "hexagonal_arch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "built_with",
+      "confidence": "EXTRACTED",
+      "source_file": "SCOPE.md",
+      "source": "rag_system",
+      "target": "llamaindex",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses_dataset",
+      "confidence": "EXTRACTED",
+      "source_file": "SCOPE.md",
+      "source": "rag_system",
+      "target": "multihop_rag",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "adopts",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "rag_system",
+      "target": "pipeline_artefacts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "built_with",
+      "confidence": "EXTRACTED",
+      "source_file": "SCOPE.md",
+      "source": "rag_system",
+      "target": "python",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "produces",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "eval_bench",
+      "target": "eval_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "runs",
+      "confidence": "INFERRED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "eval_bench",
+      "target": "eval_stage1",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "runs",
+      "confidence": "INFERRED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "eval_bench",
+      "target": "eval_stage2",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "shares_core_with",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "eval_bench",
+      "target": "interactive_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "drives",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "eval_bench",
+      "target": "single_core",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "threatens",
+      "confidence": "INFERRED",
+      "source_file": "SCOPE.md",
+      "source": "risk_rate_limits",
+      "target": "eval_bench",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "drives",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "interactive_app",
+      "target": "single_core",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "constrains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "llamaindex_confined",
+      "target": "adapters_layer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "injects",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "single_pipeline_decision",
+      "target": "port_decomposer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "motivates",
+      "confidence": "INFERRED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "rich_answer_decision",
+      "target": "type_answer",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "enables",
+      "confidence": "INFERRED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "repro_decision",
+      "target": "reproducibility",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "motivates",
+      "confidence": "INFERRED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "facade_decision",
+      "target": "rag_service",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "governs",
+      "confidence": "INFERRED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "dependency_rule",
+      "target": "domain_layer",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "depends_on",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "adapters_layer",
+      "target": "domain_layer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "depends_on",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "core_layer",
+      "target": "domain_layer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "domain_layer",
+      "target": "ports_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "domain_layer",
+      "target": "types_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "depends_on",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "apps_module",
+      "target": "core_layer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "core_layer",
+      "target": "decompose_pkg",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "core_layer",
+      "target": "pipeline_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "core_layer",
+      "target": "rag_service",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "depends_on",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "evaluation_module",
+      "target": "core_layer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "adapters_layer",
+      "target": "embeddings_adapter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "adapters_layer",
+      "target": "llamaindex_adapter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "adapters_layer",
+      "target": "llm_adapter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "adapters_layer",
+      "target": "qdrant_adapter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "config_module",
+      "target": "loader_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "config_module",
+      "target": "schema_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "pipelines_offline",
+      "target": "index_step",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "pipelines_offline",
+      "target": "ingest_step",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "evaluation_module",
+      "target": "ragas_judge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "evaluation_module",
+      "target": "retrieval_metrics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "evaluation_module",
+      "target": "run_eval",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "apps_module",
+      "target": "cli_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "apps_module",
+      "target": "ui_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "ports_py",
+      "target": "port_decomposer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "ports_py",
+      "target": "port_embedder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "ports_py",
+      "target": "port_generator",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "ports_py",
+      "target": "port_indexer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "ports_py",
+      "target": "port_judge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "ports_py",
+      "target": "port_retriever",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "composes",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "pipeline_py",
+      "target": "port_decomposer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "composes",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "pipeline_py",
+      "target": "port_generator",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "composes",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "pipeline_py",
+      "target": "port_retriever",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "produces",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "pipeline_py",
+      "target": "type_answer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "wraps",
+      "confidence": "INFERRED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "rag_service",
+      "target": "pipeline_py",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "invokes",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "cli_app",
+      "target": "rag_service",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "returns",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "rag_service",
+      "target": "type_answer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "invokes",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "run_eval",
+      "target": "rag_service",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "invokes",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "ui_app",
+      "target": "rag_service",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "decompose_pkg",
+      "target": "null_decomposer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "decompose_pkg",
+      "target": "query_decomposer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "null_decomposer",
+      "target": "port_decomposer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "produces",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "null_decomposer",
+      "target": "type_reasoning_trace",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "variant_a",
+      "target": "null_decomposer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "performs",
+      "confidence": "INFERRED",
+      "source_file": "SCOPE.md",
+      "source": "query_decomposer",
+      "target": "null_query_handling",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "query_decomposer",
+      "target": "port_decomposer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "produces",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "query_decomposer",
+      "target": "type_subquery",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "variant_ab",
+      "target": "query_decomposer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "llamaindex_adapter",
+      "target": "llamaindex",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "qdrant_adapter",
+      "target": "port_indexer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "qdrant_adapter",
+      "target": "port_retriever",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "qdrant_adapter",
+      "target": "qdrant",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "embeddings_adapter",
+      "target": "bge_embeddings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "embeddings_adapter",
+      "target": "port_embedder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "llm_adapter",
+      "target": "mistral_llm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "llm_adapter",
+      "target": "port_generator",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "validates_with",
+      "confidence": "INFERRED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "loader_py",
+      "target": "schema_py",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "computes",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "loader_py",
+      "target": "config_hash",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "writes_to",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "ingest_step",
+      "target": "artifacts_dir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "performs",
+      "confidence": "INFERRED",
+      "source_file": "SCOPE.md",
+      "source": "ingest_step",
+      "target": "metadata_tagging",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "produces",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "ingest_step",
+      "target": "type_chunk",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "writes_to",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "index_step",
+      "target": "artifacts_dir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "populates",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "index_step",
+      "target": "qdrant",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "consumes",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "index_step",
+      "target": "type_chunk",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implemented_by",
+      "confidence": "INFERRED",
+      "source_file": "SCOPE.md",
+      "source": "eval_stage1",
+      "target": "retrieval_metrics",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "compares_against",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "retrieval_metrics",
+      "target": "type_evidence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "reads",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "retrieval_metrics",
+      "target": "type_retrieved_context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "invokes",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "run_eval",
+      "target": "retrieval_metrics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "implemented_by",
+      "confidence": "INFERRED",
+      "source_file": "SCOPE.md",
+      "source": "eval_stage2",
+      "target": "ragas_judge",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "ragas_judge",
+      "target": "port_judge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "ragas_judge",
+      "target": "ragas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "judges",
+      "confidence": "INFERRED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "ragas_judge",
+      "target": "type_answer",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "invokes",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "run_eval",
+      "target": "ragas_judge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "configures",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "configs_dir",
+      "target": "run_eval",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "produces",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "run_eval",
+      "target": "eval_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "writes_to",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "run_eval",
+      "target": "runs_dir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "interacts_with",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "user_actor",
+      "target": "cli_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "defers",
+      "confidence": "INFERRED",
+      "source_file": "SCOPE.md",
+      "source": "out_of_scope",
+      "target": "ui_app",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "relies_on",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "reproducibility",
+      "target": "runs_dir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "relies_on",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "reproducibility",
+      "target": "artifacts_dir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "type_reasoning_trace",
+      "target": "type_subquery",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "retrieves_from",
+      "confidence": "INFERRED",
+      "source_file": "SCOPE.md",
+      "source": "metadata_retrieval",
+      "target": "type_chunk",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "annotates",
+      "confidence": "EXTRACTED",
+      "source_file": "SCOPE.md",
+      "source": "metadata_tagging",
+      "target": "type_chunk",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "INFERRED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "type_citation",
+      "target": "type_chunk",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "type_retrieved_context",
+      "target": "type_chunk",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "type_answer",
+      "target": "type_retrieved_context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "type_answer",
+      "target": "type_citation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "type_answer",
+      "target": "type_reasoning_trace",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "sets_is_answerable",
+      "confidence": "INFERRED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "null_query_handling",
+      "target": "type_answer",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "type_answer",
+      "target": "type_token_usage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "provides",
+      "confidence": "INFERRED",
+      "source_file": "SCOPE.md",
+      "source": "multihop_rag",
+      "target": "type_evidence",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "validates",
+      "confidence": "INFERRED",
+      "source_file": "SCOPE.md",
+      "source": "judge_validation",
+      "target": "port_judge",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "compares",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "ab_comparison",
+      "target": "variant_a",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "variant_a",
+      "target": "metadata_retrieval",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "compares",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "ab_comparison",
+      "target": "variant_ab",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "variant_ab",
+      "target": "metadata_retrieval",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "relies_on",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "reproducibility",
+      "target": "config_hash",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "limited_by",
+      "confidence": "EXTRACTED",
+      "source_file": "ARCHITECTURE.md",
+      "source": "reproducibility",
+      "target": "llm_determinism_limit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "provides",
+      "confidence": "EXTRACTED",
+      "source_file": "SCOPE.md",
+      "source": "multihop_rag",
+      "target": "corpus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "arises_from",
+      "confidence": "EXTRACTED",
+      "source_file": "SCOPE.md",
+      "source": "risk_rate_limits",
+      "target": "mistral_llm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "arises_from",
+      "confidence": "INFERRED",
+      "source_file": "SCOPE.md",
+      "source": "risk_self_pref",
+      "target": "mistral_llm",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "requires",
+      "confidence": "EXTRACTED",
+      "source_file": "SCOPE.md",
+      "source": "eval_stage2",
+      "target": "judge_validation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "threatens",
+      "confidence": "INFERRED",
+      "source_file": "SCOPE.md",
+      "source": "risk_self_pref",
+      "target": "eval_stage2",
+      "confidence_score": 0.5
+    }
+  ],
+  "hyperedges": []
+}
