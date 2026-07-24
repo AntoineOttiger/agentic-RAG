@@ -1,0 +1,34 @@
+[
+  {
+    "query": "Which company's chief executive is Maria Lopez, and what AI chip did that company launch in September 2023?",
+    "answer": "Maria Lopez is the chief executive of TechCorp, which launched the Orion AI chip in September 2023.",
+    "question_type": "inference_query",
+    "evidence_list": [
+      {"title": "TechCorp unveils Orion AI chip at September launch", "author": "Jane Doe", "url": "https://news.example.com/techcorp-orion", "source": "TechDaily", "category": "technology", "published_at": "2023-09-15T10:00:00", "fact": "Chief executive Maria Lopez presented the Orion chip."},
+      {"title": "TechCorp stock jumps after Orion demand surges", "author": "Jane Doe", "url": "https://news.example.com/techcorp-stock", "source": "TechDaily", "category": "business", "published_at": "2023-11-05T14:00:00", "fact": "The Orion chip, launched in September, has become the company's fastest-selling product."}
+    ]
+  },
+  {
+    "query": "Did TechCorp launch the Orion chip before or after NovaChip reported its record third-quarter revenue?",
+    "answer": "TechCorp launched the Orion chip in September 2023, before NovaChip reported its record third-quarter revenue in October 2023.",
+    "question_type": "temporal_query",
+    "evidence_list": [
+      {"title": "TechCorp unveils Orion AI chip at September launch", "author": "Jane Doe", "url": "https://news.example.com/techcorp-orion", "source": "TechDaily", "category": "technology", "published_at": "2023-09-15T10:00:00", "fact": "TechCorp announced the Orion AI chip on September 15, 2023."},
+      {"title": "NovaChip reports record quarterly revenue", "author": "John Smith", "url": "https://news.example.com/novachip-q3", "source": "MarketWatch", "category": "business", "published_at": "2023-10-20T09:00:00", "fact": "NovaChip reported record quarterly revenue for the third quarter of 2023."}
+    ]
+  },
+  {
+    "query": "Between TechCorp and NovaChip, which company reported a specific quarterly revenue figure, and how much was it?",
+    "answer": "NovaChip reported a specific quarterly revenue figure of 4.2 billion dollars.",
+    "question_type": "comparison_query",
+    "evidence_list": [
+      {"title": "NovaChip reports record quarterly revenue", "author": "John Smith", "url": "https://news.example.com/novachip-q3", "source": "MarketWatch", "category": "business", "published_at": "2023-10-20T09:00:00", "fact": "NovaChip reported record quarterly revenue of 4.2 billion dollars."}
+    ]
+  },
+  {
+    "query": "What was the price of TechCorp's Orion chip in euros at its September 2023 launch?",
+    "answer": "Insufficient information.",
+    "question_type": "null_query",
+    "evidence_list": []
+  }
+]

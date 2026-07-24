@@ -1,0 +1,38 @@
+[
+  {
+    "title": "TechCorp unveils Orion AI chip at September launch",
+    "author": "Jane Doe",
+    "url": "https://news.example.com/techcorp-orion",
+    "source": "TechDaily",
+    "category": "technology",
+    "published_at": "2023-09-15T10:00:00",
+    "body": "TechCorp announced the Orion AI chip on September 15, 2023. The company said the Orion chip delivers three times the performance of its previous generation. Chief executive Maria Lopez presented the chip at the annual developer conference in San Francisco. Analysts noted that the Orion targets data center customers and competes directly with NovaChip's flagship processor."
+  },
+  {
+    "title": "NovaChip reports record quarterly revenue",
+    "author": "John Smith",
+    "url": "https://news.example.com/novachip-q3",
+    "source": "MarketWatch",
+    "category": "business",
+    "published_at": "2023-10-20T09:00:00",
+    "body": "NovaChip reported record quarterly revenue of 4.2 billion dollars for the third quarter of 2023. The chipmaker attributed the growth to strong demand for its data center processors. Chief executive David Kim said the company expects continued momentum despite rising competition from TechCorp's newly launched Orion chip. NovaChip raised its full-year guidance following the results."
+  },
+  {
+    "title": "TechCorp stock jumps after Orion demand surges",
+    "author": "Jane Doe",
+    "url": "https://news.example.com/techcorp-stock",
+    "source": "TechDaily",
+    "category": "business",
+    "published_at": "2023-11-05T14:00:00",
+    "body": "Shares of TechCorp rose 12 percent on November 5, 2023, after the company said demand for the Orion AI chip had exceeded expectations. Chief executive Maria Lopez told investors that order backlogs stretched into 2024. The rally added roughly 30 billion dollars to TechCorp's market value. The Orion chip, launched in September, has become the company's fastest-selling product ever."
+  },
+  {
+    "title": "Global cloud spending accelerates in 2023",
+    "author": "Priya Nair",
+    "url": "https://news.example.com/cloud-spending",
+    "source": "CloudReport",
+    "category": "technology",
+    "published_at": "2023-08-01T08:00:00",
+    "body": "Worldwide spending on cloud infrastructure accelerated in 2023, driven by demand for artificial intelligence workloads. Hyperscale providers increased capital expenditure to expand data center capacity. Industry analysts expect AI training to remain the single largest driver of new chip purchases through 2024."
+  }
+]

@@ -1,0 +1,44 @@
+# Run A — baseline. Retrieval enrichi de métadonnées, SANS décomposition.
+# Voir ARCHITECTURE §6 : seule `variant` (donc le Decomposer injecté) change vs enriched.yaml.
+name: baseline-A
+variant: A            # NullDecomposer (trace à un seul hop)
+seed: 42
+prompt_version: decompose-v1
+
+data:
+  corpus_path: data/corpus.json
+  questions_path: data/MultiHopRAG.json
+  limit: null          # null = toutes les questions ; mettre un entier pour un dev run
+
+chunking:
+  chunk_size: 512
+  chunk_overlap: 64
+
+embedding:
+  model: BAAI/bge-small-en-v1.5
+  device: cpu
+  normalize: true
+  batch_size: 32
+
+vector_store:
+  provider: qdrant
+  location: local
+  path: artifacts/qdrant
+  collection: multihop_rag
+  distance: cosine
+
+retrieval:
+  top_k: 6
+  use_metadata_filters: true
+
+llm:
+  provider: mistral
+  model: mistral-small-latest
+  temperature: 0.0
+  max_tokens: 1024
+  api_key_env: MISTRAL_API_KEY
+
+judge:
+  enabled: true
+  provider: native      # "native" (LLM-as-judge) ou "ragas"
+  metrics: [answer_correctness, faithfulness, context_relevance]

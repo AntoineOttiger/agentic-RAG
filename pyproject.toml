@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentic-rag"
+version = "0.1.0"
+description = "RAG à raisonnement temporel multi-hop — architecture hexagonale, éval A vs A+B mesurée."
+requires-python = ">=3.10"
+dependencies = [
+  "pydantic>=2.5",
+  "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+# Backend réel (bge + Qdrant + Mistral) + éval avancée. Non requis pour le smoke run mémoire.
+real = [
+  "sentence-transformers>=2.3",
+  "qdrant-client>=1.7",
+  "llama-index-core>=0.10",
+  "mistralai>=1.0",
+]
+ragas = [
+  "ragas>=0.1",
+  "datasets>=2.14",
+]
+dev = [
+  "pytest>=7.4",
+]
+
+[project.scripts]
+rag-eval = "evaluation.run_eval:main"
+rag-compare = "evaluation.compare:main"
+rag-cli = "apps.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

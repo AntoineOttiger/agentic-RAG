@@ -1,0 +1,21 @@
+# Artefacts & runs (générés, adressés par contenu / horodatés)
+artifacts/
+runs/
+!runs/.gitkeep
+
+# Données volumineuses téléchargées (le sample reste versionné)
+data/corpus.json
+data/MultiHopRAG.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+build/
+dist/
+
+# Secrets
+.env

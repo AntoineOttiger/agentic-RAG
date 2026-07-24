@@ -1,0 +1,20 @@
+# Smoke run A — jeu d'exemple + backend mémoire (aucune dépendance externe / clé API).
+# Sert à valider la plomberie de bout en bout. `python -m evaluation.run_eval configs/smoke_baseline.yaml --backend memory`
+name: smoke-baseline-A
+variant: A
+seed: 42
+data:
+  corpus_path: data/sample_corpus.json
+  questions_path: data/sample_questions.json
+  limit: null
+chunking:
+  chunk_size: 256
+  chunk_overlap: 32
+embedding:
+  model: BAAI/bge-small-en-v1.5
+retrieval:
+  top_k: 4
+  use_metadata_filters: true
+judge:
+  enabled: true
+  provider: native

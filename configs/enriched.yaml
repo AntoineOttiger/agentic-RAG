@@ -1,0 +1,44 @@
+# Run A+B — enrichi. IDENTIQUE à baseline.yaml sauf `variant`.
+# C'est LA discipline de l'expérience : une seule variable change (le Decomposer).
+name: enriched-AB
+variant: A+B          # QueryDecomposer (décomposition agentique multi-hop)
+seed: 42
+prompt_version: decompose-v1
+
+data:
+  corpus_path: data/corpus.json
+  questions_path: data/MultiHopRAG.json
+  limit: null
+
+chunking:
+  chunk_size: 512
+  chunk_overlap: 64
+
+embedding:
+  model: BAAI/bge-small-en-v1.5
+  device: cpu
+  normalize: true
+  batch_size: 32
+
+vector_store:
+  provider: qdrant
+  location: local
+  path: artifacts/qdrant
+  collection: multihop_rag
+  distance: cosine
+
+retrieval:
+  top_k: 6
+  use_metadata_filters: true
+
+llm:
+  provider: mistral
+  model: mistral-small-latest
+  temperature: 0.0
+  max_tokens: 1024
+  api_key_env: MISTRAL_API_KEY
+
+judge:
+  enabled: true
+  provider: native
+  metrics: [answer_correctness, faithfulness, context_relevance]
