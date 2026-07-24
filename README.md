@@ -31,7 +31,10 @@ python -m apps.cli --config configs/smoke_enriched.yaml --backend memory \
 ```bash
 pip install -e .[real]                 # + .[ragas] pour le juge RAGAS
 python scripts/prepare_data.py          # télécharge corpus.json + MultiHopRAG.json
-export MISTRAL_API_KEY=...              # clé API (jamais dans le code/YAML)
+
+# Clé API (jamais dans le code/YAML). Au choix :
+cp .env.example .env                     # puis renseigner MISTRAL_API_KEY dans .env
+export MISTRAL_API_KEY=...              # ... ou en variable d'environnement
 
 python -m evaluation.run_eval configs/baseline.yaml --backend real
 python -m evaluation.run_eval configs/enriched.yaml --backend real

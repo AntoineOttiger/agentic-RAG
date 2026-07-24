@@ -15,12 +15,26 @@ import yaml
 from config.schema import RunConfig
 
 
+def _load_dotenv() -> None:
+    """Charge un éventuel fichier `.env` dans os.environ (secrets, ex. MISTRAL_API_KEY).
+
+    Sans effet si python-dotenv n'est pas installé ou si aucun `.env` n'existe.
+    Les variables déjà présentes dans l'environnement ne sont pas écrasées.
+    """
+    try:
+        from dotenv import load_dotenv
+    except ImportError:
+        return
+    load_dotenv(override=False)
+
+
 def _stable_hash(obj: object, length: int = 12) -> str:
     payload = json.dumps(obj, sort_keys=True, ensure_ascii=False, default=str)
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:length]
 
 
 def load_config(path: str | Path) -> RunConfig:
+    _load_dotenv()
     raw = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
     return RunConfig.model_validate(raw or {})
 
